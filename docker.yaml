@@ -1,0 +1,10 @@
+version: "3"
+services:
+  app:
+    image: registry.cn-qingdao.aliyuncs.com/wod/ffmpeg:v5.1.4
+    stdin_open: true
+    tty: true
+    entrypoint: /root/scripts/compress_videos.sh
+    volumes:
+      - /share/CACHEDEV1_DATA/Public/Plex:/share/CACHEDEV1_DATA/Public/Plex
+      - /share/CACHEDEV1_DATA/Public/ffmpeg:/root/scripts
