@@ -10,16 +10,18 @@ rootDirectory="/share/CACHEDEV1_DATA/Public/Plex/Mosaics"
 for dir in "$rootDirectory"/*/; do
   find "$dir" -maxdepth 1 -type f \( -name "*.mp4" -o -name "*.mkv" \) | while read file; do
     fileName=$(basename "$file")
-    bangou=$(basename "$fileName" ".mkv")
-    bangou=$(basename "$fileName" ".mp4")
-    bangou=$(basename "$fileName" -hack)
+    fileName=$(basename "$fileName" ".mp4")
+    bangou=$(basename "$fileName" "-hack")
+    bangou=$(basename "$bangou" "-C")
+    bangou=$(basename "$bangou" "-leak")
+    bangou=$(basename "$bangou" "-流出")
     destDir="$dir/$bangou"
-    destFile="$destDir/$fileName"
+    destFile="$destDir/$fileName.mp4"
 
     if [[ -e "$destFile" ]]; then
-      rm -f "$destFile" "$destDir/$bangou.mkv" "$destDir/$bangou-hack.mkv"
+      rm -f "$destDir/$fileName.mp4" "$destDir/$fileName.mkv"
       mv "$file" "$destFile"
-      echo "已移动 $fileName 到 $bangou/$fileName"
+      echo "已移动 $fileName.mp4 到 $bangou/$fileName.mp4"
     fi
   done
 done
