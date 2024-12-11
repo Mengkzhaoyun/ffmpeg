@@ -37,7 +37,20 @@ process_file() {
       local bangou=$(basename "$(dirname "$file")") # 获取最近目录名
 
       local winSrcFile="$winSrcDirectory\\$dirName\\$bangou\\$fileName"
-      local winDesFile="$winDesDirectory\\$dirName\\$bangou-hack.mp4"
+      # 判断文件名是否包含 -hack 或 -leak
+      # 去掉文件名的类型后缀
+      local baseName="${fileName%.*}"
+      if [[ "$baseName" == *"-hack" ]]; then
+        local winDesFile="$winDesDirectory\\$dirName\\$bangou-hack.mp4"
+      elif [[ "$baseName" == *"-leak" ]]; then
+        local winDesFile="$winDesDirectory\\$dirName\\$bangou-leak.mp4"
+      elif [[ "$baseName" == *"-流出" ]]; then
+        local winDesFile="$winDesDirectory\\$dirName\\$bangou-流出.mp4"
+      elif [[ "$baseName" == *"-C" ]]; then
+        local winDesFile="$winDesDirectory\\$dirName\\$bangou-C.mp4"
+      else
+        local winDesFile="$winDesDirectory\\$dirName\\$bangou.mp4"
+      fi
 
       echo "\"MP4\" \"Optimum quality and size\" \"$winSrcFile\" \"$winDesFile\"" >>"$dirTask"
     fi
