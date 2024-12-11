@@ -34,10 +34,7 @@ process_file() {
       echo "文件: $file, 编码：$codec, 码率: ${bitrate_mbps} Mbps"
 
       local fileName=$(basename "$file")
-      local bangou=$(basename "$fileName" .mp4)
-      local bangou=$(basename "$fileName" .mkv)
-      bangou="${bangou%-hack}"
-      bangou="${bangou%-C}"
+      local bangou=$(basename "$(dirname "$file")") # 获取最近目录名
 
       local winSrcFile="$winSrcDirectory\\$dirName\\$bangou\\$fileName"
       local winDesFile="$winDesDirectory\\$dirName\\$bangou-hack.mp4"
