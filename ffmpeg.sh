@@ -52,7 +52,7 @@ process_file() {
         local winDesFile="$winDesDirectory\\$dirName\\$bangou.mp4"
       fi
 
-      echo "\"MP4\" \"Optimum quality and size\" \"$winSrcFile\" \"$winDesFile\"" >>"$dirTask"
+      echo "\"Custom\" \"Plex MP4 HEVC(H265)\" \"$winSrcFile\" \"$winDesFile\"" >>"$dirTask"
     fi
   fi
 }
