@@ -18,7 +18,7 @@ for dir in "$rootDirectory"/*/; do
     destDir="$dir/$bangou"
     destFile="$destDir/$fileName.mp4"
 
-    if [[ -e "$destFile" ]]; then
+    if [[ -e "$destDir/$fileName.nfo" ]]; then
       rm -f "$destDir/$fileName.mp4" "$destDir/$fileName.mkv"
       mv "$file" "$destFile"
       echo "已移动 $fileName.mp4 到 $bangou/$fileName.mp4"
