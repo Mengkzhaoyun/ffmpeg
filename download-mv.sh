@@ -19,6 +19,7 @@ process_dict() {
     mosaic_dict["$dir_name"]="$dir"
   done
 
+  mosaic_dict["田中レモン"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/1000-楓花恋/"
   mosaic_dict["楓カレン"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/1000-楓花恋/"
   mosaic_dict["Miru"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/1005-Miru/"
   mosaic_dict["楓ふうあ"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/2001-枫富爱/"
