@@ -19,23 +19,10 @@ process_dict() {
     mosaic_dict["$dir_name"]="$dir"
   done
 
-  mosaic_dict["田中レモン"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/1000-楓花恋/"
-  mosaic_dict["楓カレン"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/1000-楓花恋/"
-  mosaic_dict["Miru"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/1005-Miru/"
-  mosaic_dict["楓ふうあ"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/2001-枫富爱/"
-  mosaic_dict["水川潤"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/2001-由愛可奈/"
-  mosaic_dict["香椎りあ"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/3002-香椎花乃/"
-  mosaic_dict["雅さやか"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/3002-香椎花乃/"
-  mosaic_dict["花沢ひまり"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/9001-木下ひまり/"
-  mosaic_dict["JULIA"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/9001-Julia/"
-  mosaic_dict["めぐり（藤浦めぐ）"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/9001-藤浦めぐ/"
-  mosaic_dict["小倉七海"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/9001-兒玉七海/"
-  mosaic_dict["森沢かな（飯岡かなこ）"]="/share/CACHEDEV1_DATA/Public/Plex/Mosaics/9001-森沢かな/"
-
-  # # 打印字典内容
-  # for key in "${!mosaic_dict[@]}"; do
-  #   echo "$key: ${mosaic_dict[$key]}"
-  # done
+  # 从配置文件读取额外的映射关系
+  while IFS='=' read -r key value; do
+    mosaic_dict["$key"]="$value"
+  done < "$dstDirectory/actors_mapping.txt"
 }
 
 process_file() {

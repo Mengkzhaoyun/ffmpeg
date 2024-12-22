@@ -12,7 +12,6 @@ process_file() {
   local dirName="$2"
 
   # 使用 ffprobe 获取视频信息
-  # /share/CACHEDEV1_DATA/Public/Plex/Leak/DV-1349/DV-1349-流出.wmv
   local info=$(ffprobe -v quiet -print_format json -show_format -show_streams "$file")
   local height=$(jq -r '.streams[0].height // empty' <<<"$info")
 
