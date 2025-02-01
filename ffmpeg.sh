@@ -21,8 +21,10 @@ process_file() {
   local info=$(ffprobe -v quiet -print_format json -show_format -show_streams "$file")
   local bitrate=$(jq -r '.format.bit_rate // empty' <<<"$info")
   local codec=$(jq -r '.streams[0].codec_name // empty' <<<"$info")
+  local height=$(jq -r '.streams[0].height // empty' <<<"$info")
 
-  [[ "$codec" == "hevc" ]] && { return; } # 调试信息
+  # 当编码为 hevc 且分辨率小于 1080p 时跳过
+  [[ "$codec" == "hevc" && "$height" -le 1080 ]] && { return; }
 
   if [[ -n "$bitrate" ]]; then
     # 将 bitrate 从 bps 转换为 kbps
