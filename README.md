@@ -41,3 +41,10 @@ sudo curl \
   -o /usr/local/bin/yq && \
 sudo chmod +x /usr/local/bin/yq
 ```
+
+### shfmt
+
+```bash
+sudo apt update && \
+sudo apt install -y shfmt
+```
