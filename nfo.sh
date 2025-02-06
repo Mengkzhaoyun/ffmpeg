@@ -96,8 +96,8 @@ update_nfo() {
     
     if [[ "$current_name" != "$new_name" ]]; then
         xmlstarlet ed -L \
-            -u "//actor[name='$current_name']/name" -v "$new_name" \
             -u "//actor[name='$current_name']/thumb" -v "$new_thumb" \
+            -u "//actor[name='$current_name']/name" -v "$new_name" \
             "$nfo_file"
         echo "更新 NFO 文件: $nfo_file"
     elif [[ "$current_thumb" != "$new_thumb" ]]; then
