@@ -6,7 +6,7 @@ export LANG=C
 
 srcDirectory="/share/CACHEDEV1_DATA/Public/Plex/Downloads"
 dstDirectory="/share/CACHEDEV1_DATA/Public/Plex/Mosaics"
-yaml_file="$dstDirectory/actors.yaml"  # 定义 YAML 文件路径
+yaml_file="$dstDirectory/actors.yaml" # 定义 YAML 文件路径
 
 # 创建一个空字典
 declare -A mosaic_dict
@@ -23,16 +23,16 @@ process_dict() {
   # 从 YAML 文件读取演员信息
   actors_count=$(yq eval '.actors | length' "$yaml_file")
 
-  for ((i=0; i<actors_count; i++)); do
+  for ((i = 0; i < actors_count; i++)); do
     name=$(yq eval ".actors[$i].name" "$yaml_file")
-    aliases=$(yq eval ".actors[$i].aliases | join(\",\")" "$yaml_file")  # 获取别名
-    
+    aliases=$(yq eval ".actors[$i].aliases | join(\",\")" "$yaml_file") # 获取别名
+
     # 只有当 aliases 非空且 mosaic_dict[$name] 存在时才处理别名
     if [[ -n "$aliases" && -n "${mosaic_dict[$name]}" ]]; then
       # 将每个别名与真实名字的路径保存到 actor_aliases 字典中
-      IFS=',' read -r -a alias_array <<< "$aliases"  # 将别名转换为数组
+      IFS=',' read -r -a alias_array <<<"$aliases" # 将别名转换为数组
       for alias in "${alias_array[@]}"; do
-        mosaic_dict["$alias"]="${mosaic_dict[$name]}"  # 将别名与真实名字的路径关联
+        mosaic_dict["$alias"]="${mosaic_dict[$name]}" # 将别名与真实名字的路径关联
       done
     fi
   done

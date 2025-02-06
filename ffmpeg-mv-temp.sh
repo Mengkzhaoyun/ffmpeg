@@ -9,7 +9,7 @@ rootDirectory="/share/CACHEDEV1_DATA/Public/Plex/Mosaics"
 process_file() {
   local dir="$1"
   local dirName=$(basename "$dir")
-  
+
   # 遍历目录下的所有文件
   for file in "$dir"/*; do
     # 检查是否为文件（非目录）
@@ -74,7 +74,7 @@ for dir in "$rootDirectory"/*/; do
 
   for bangouDir in "$actorDirectory"/*/; do
     bangouDirectory=${bangouDir%/} # 移除尾部的斜杠
-    process_file $bangouDirectory   
+    process_file $bangouDirectory
   done
 
 done

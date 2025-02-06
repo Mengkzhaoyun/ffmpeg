@@ -46,5 +46,7 @@ sudo chmod +x /usr/local/bin/yq
 
 ```bash
 sudo apt update && \
-sudo apt install -y shfmt
+sudo apt install -y shfmt util-linux
+
+sudo chmod +x /usr/bin/shfmt
 ```
