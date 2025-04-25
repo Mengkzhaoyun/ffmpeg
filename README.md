@@ -14,7 +14,7 @@ bash ffmpeg-mv-vedios.sh
 
 # 下载任务
 ## 将downloads刮削视频迁移至Mosaics目录
-bash download-mv.sh && bash nfo.sh
+bash download-mv.sh
 ```
 
 ## nfo
