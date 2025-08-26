@@ -31,17 +31,17 @@ bash nfo.sh
 
 ```bash
 sudo apt update && \
-sudo apt install -y ffmpeg bc jq parallel xmlstarlet
+sudo apt install -y ffmpeg bc parallel xmlstarlet
 ```
 
 ### yq
 
 ```bash
-sudo curl \
+curl \
   -x $SOCKS5_PROXY_LOCAL \
   -fL https://github.com/mikefarah/yq/releases/download/v4.45.1/yq_linux_amd64 \
-  -o /usr/local/bin/yq && \
-sudo chmod +x /usr/local/bin/yq
+  -o $HOME/.local/bin/yq && \
+chmod +x $HOME/.local/bin/yq
 ```
 
 ### shfmt
