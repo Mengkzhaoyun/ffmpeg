@@ -179,12 +179,12 @@ main() {
     local dir_name
     dir_name=$(basename "$dir" | sed 's/^[^-]*-//')
 
-    # 检查 ACTOR_DICT 中是否存在该演员
-    if [[ -n "${ACTOR_DICT[$dir_name]}" ]]; then
-      echo "处理目录: $dir_name"
-    else
-      continue
-    fi
+    # # 检查 ACTOR_DICT 中是否存在该演员
+    # if [[ -n "${ACTOR_DICT[$dir_name]}" ]]; then
+    #   echo "处理目录: $dir_name"
+    # else
+    #   continue
+    # fi
 
     while IFS= read -r -d '' nfo_file; do
       process_nfo "$nfo_file" "$dir_name"
