@@ -27,13 +27,6 @@ cp .tmp/actors.yaml /share/CACHEDEV1_DATA/Public/Plex/Mosaics/actors.yaml && bas
 bash nfo.sh
 ```
 
-### xmlstarlet
-
-```bash
-sudo apt update && \
-sudo apt install -y ffmpeg bc parallel xmlstarlet
-```
-
 ### yq
 
 ```bash
@@ -44,11 +37,11 @@ curl \
 chmod +x $HOME/.local/bin/yq
 ```
 
-### shfmt
+### install
 
 ```bash
 sudo apt update && \
-sudo apt install -y shfmt util-linux
+sudo apt install -y shfmt util-linux ffmpeg bc parallel xmlstarlet
 
 sudo chmod +x /usr/bin/shfmt
 ```
