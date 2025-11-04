@@ -30,7 +30,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 rootDirectory="/share/CACHEDEV1_DATA/Public/Plex/Mosaics"
-bitrate_threshold=6000      # 视频的码率阈值 (6000 kbps)
+bitrate_threshold=6200      # 视频的码率阈值 (6200 kbps)
 winSrcDirectory='\\nas-mengk\Public\Plex\Mosaics'
 winDesDirectory='C:\Users\Mengk\Videos'
 
