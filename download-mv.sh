@@ -170,8 +170,8 @@ process_dict() {
   for dir in "$dstDirectory"/*/; do
     # 获取目录名并处理
     dir_name=$(basename "$dir" | sed 's/^[^-]*-//')
-    # 将目录名和目录路径添加到字典中
-    mosaic_dict["$dir_name"]="$dir"
+    # 将目录名和目录路径添加到字典中（移除尾部斜杠）
+    mosaic_dict["$dir_name"]="${dir%/}"
   done
 
   # 从 YAML 文件读取演员信息
