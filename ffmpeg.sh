@@ -129,15 +129,26 @@ for dir in "$rootDirectory"/*/; do
   dirName=$(basename "$dir")
   dirTask="$rootDirectory/$dirName.task"
   
-  # --- 定义并初始化缓存文件 ---
+  # --- 定义并管理缓存文件 ---
   cacheFile="$dir/ffmpeg.md"
-  if $USE_CACHE && [ ! -f "$cacheFile" ]; then
-    # 如果启用缓存且缓存文件不存在，创建并写入表头
-    echo "# FFmpeg 视频信息缓存" > "$cacheFile"
-    echo "" >> "$cacheFile"
-    echo "| 文件名 | 编码 | 码率 (kbps) | 高度 |" >> "$cacheFile"
-    echo "|---|---|---|---|" >> "$cacheFile"
-    echo "创建缓存文件: $cacheFile"
+
+  if $USE_CACHE; then
+    # 缓存已启用
+    if [ ! -f "$cacheFile" ]; then
+      # 如果启用缓存且缓存文件不存在，创建并写入表头
+      echo "# FFmpeg 视频信息缓存" > "$cacheFile"
+      echo "" >> "$cacheFile"
+      echo "| 文件名 | 编码 | 码率 (kbps) | 高度 |" >> "$cacheFile"
+      echo "|---|---|---|---|" >> "$cacheFile"
+      echo "创建缓存文件: $cacheFile"
+    fi
+  else
+    # 缓存未启用
+    if [ -f "$cacheFile" ]; then
+      # 如果缓存文件存在，则删除它
+      echo "缓存未启用，删除旧的缓存文件: $cacheFile"
+      rm "$cacheFile"
+    fi
   fi
 
   # 处理目录中的文件

@@ -7,8 +7,6 @@
 ## 生成压缩视频task
 bash ffmpeg.sh
 
-## 将压缩完的视频拷贝至对应Mosaics
-
 ## 将压缩完的视频迁移至Mosaics子目录
 bash ffmpeg-mv-vedios.sh
 
