@@ -2,7 +2,8 @@
 
 # 定义常量
 readonly DST_DIRECTORY="/share/CACHEDEV1_DATA/Public/Plex/Mosaics"
-readonly DST_YAML="$DST_DIRECTORY/actors.yaml"
+readonly CACHE_DIRECTORY="$DST_DIRECTORY/.cache"
+readonly DST_YAML="$CACHE_DIRECTORY/actors.yaml"
 
 # 声明关联数组
 declare -A ACTOR_DICT
@@ -14,8 +15,19 @@ handle_error() {
   exit 1
 }
 
+# 确保缓存目录存在
+ensure_cache_directory() {
+  if [[ ! -d "$CACHE_DIRECTORY" ]]; then
+    echo "缓存目录不存在，创建目录: $CACHE_DIRECTORY"
+    mkdir -p "$CACHE_DIRECTORY" || handle_error "无法创建缓存目录 $CACHE_DIRECTORY"
+  fi
+}
+
 # 初始化演员字典
 init_actor_dict() {
+  # 确保缓存目录存在
+  ensure_cache_directory
+  
   [[ -f "$DST_YAML" ]] || handle_error "找不到 YAML 文件 $DST_YAML"
 
   local actors_count=$(yq eval '.actors | length' "$DST_YAML")
