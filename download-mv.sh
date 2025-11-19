@@ -6,7 +6,7 @@ export LANG=C
 
 srcDirectory="/share/CACHEDEV1_DATA/Public/Plex/Downloads"
 dstDirectory="/share/CACHEDEV1_DATA/Public/Plex/Mosaics"
-DST_YAML="$dstDirectory/actors.yaml" # 定义 YAML 文件路径
+DST_YAML="$dstDirectory/.cache/actors.yaml" # 定义 YAML 文件路径
 
 # 创建一个空字典
 declare -A mosaic_dict
