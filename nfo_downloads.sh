@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # 定义常量
-readonly DST_DIRECTORY="/share/CACHEDEV1_DATA/Public/Plex/Mosaics"
-readonly CACHE_DIRECTORY="$DST_DIRECTORY/.cache"
+readonly DOWNLOADS_DIRECTORY="/share/CACHEDEV1_DATA/Public/Plex/Downloads"
+readonly MOSAICS_DIRECTORY="/share/CACHEDEV1_DATA/Public/Plex/Mosaics"
+readonly CACHE_DIRECTORY="$MOSAICS_DIRECTORY/.cache"
 readonly DST_YAML="$CACHE_DIRECTORY/actors.yaml"
 
 # 声明关联数组
@@ -50,56 +51,31 @@ init_actor_dict() {
   echo "成功加载 ${#ACTOR_DICT[@]} 个演员信息"
 }
 
-# 重映射演员信息
+# 重映射演员信息（多演员模式）
 remap_actor() {
   local current_name="$1"
   local current_thumb="$2"
-  local dir_name="$3"
 
-  local result_name="$current_name"
-  local result_thumb="$current_thumb"
+  # Downloads 目录只使用多演员匹配模式
+  for actor_name in "${!ACTOR_DICT[@]}"; do
+    local actor_info="${ACTOR_DICT[$actor_name]}"
+    IFS=';' read -r thumb aliases <<<"$actor_info"
 
-  # 处理单演员情况
-  if [[ -n "$dir_name" ]]; then
-    local actor_info="${ACTOR_DICT[$dir_name]}"
-    if [[ -n "$actor_info" ]]; then
-      IFS=';' read -r thumb aliases <<<"$actor_info"
-      if [[ "$current_name" == "$dir_name" ]]; then
-        echo "$current_name;$thumb"
-        return
-      fi
-      if [[ -n "$aliases" ]]; then
-        IFS=',' read -r -a alias_array <<<"$aliases"
-        for alias in "${alias_array[@]}"; do
-          if [[ "$current_name" == "$alias" ]]; then
-            echo "$dir_name;$thumb"
-            return
-          fi
-        done
-      fi
+    if [[ "$current_name" == "$actor_name" ]]; then
+      echo "$current_name;$thumb"
+      return
     fi
-  # 处理多演员情况
-  else
-    for actor_name in "${!ACTOR_DICT[@]}"; do
-      local actor_info="${ACTOR_DICT[$actor_name]}"
-      IFS=';' read -r thumb aliases <<<"$actor_info"
 
-      if [[ "$current_name" == "$actor_name" ]]; then
-        echo "$current_name;$thumb"
-        return
-      fi
-
-      if [[ -n "$aliases" ]]; then
-        IFS=',' read -r -a alias_array <<<"$aliases"
-        for alias in "${alias_array[@]}"; do
-          if [[ "$current_name" == "$alias" ]]; then
-            echo "$actor_name;$thumb"
-            return
-          fi
-        done
-      fi
-    done
-  fi
+    if [[ -n "$aliases" ]]; then
+      IFS=',' read -r -a alias_array <<<"$aliases"
+      for alias in "${alias_array[@]}"; do
+        if [[ "$current_name" == "$alias" ]]; then
+          echo "$actor_name;$thumb"
+          return
+        fi
+      done
+    fi
+  done
 
   echo "$current_name;$current_thumb"
 }
@@ -134,7 +110,6 @@ update_nfo() {
 # 处理单个 NFO 文件
 process_nfo() {
   local nfo_file="$1"
-  local dir_name="$2"
 
   local nfo_content
   nfo_content=$(cat "$nfo_file") || {
@@ -151,9 +126,6 @@ process_nfo() {
     return
   }
 
-  local actor_count
-  actor_count=$(echo "$actor_nodes" | wc -l)
-
   while IFS= read -r actor_info; do
     [[ -n "$actor_info" ]] || continue
 
@@ -161,43 +133,39 @@ process_nfo() {
     IFS=':' read -r current_name current_thumb <<<"$actor_info"
 
     local result
-    if ((actor_count > 1)); then
-      # 调试信息：输出当前处理的演员信息
-      # echo "处理演员【多演员】: 名称: $current_name, 头像: $current_thumb, 目录: $dir_name, 演员信息: ${ACTOR_DICT[$dir_name]}"
-      result=$(remap_actor "$current_name" "$current_thumb")
-    else
-      # 调试信息：输出当前处理的演员信息
-      # echo "处理演员【单演员】: 名称: $current_name, 头像: $current_thumb, 目录: $dir_name, 演员信息: ${ACTOR_DICT[$dir_name]}"
-      result=$(remap_actor "$current_name" "$current_thumb" "$dir_name")
-    fi
+    result=$(remap_actor "$current_name" "$current_thumb")
 
     IFS=';' read -r new_name new_thumb <<<"$result"
-
-    # 调试信息：输出更新的信息
-    # echo "更新演员: 当前名称: $current_name, 新名称: $new_name, 新头像: $new_thumb"
 
     update_nfo "$nfo_file" "$current_name" "$current_thumb" "$new_name" "$new_thumb"
   done <<<"$actor_nodes"
 }
 
+# 处理 Downloads 目录
+process_downloads_directory() {
+  echo "处理 Downloads 目录..."
+  
+  [[ -d "$DOWNLOADS_DIRECTORY" ]] || handle_error "Downloads 目录不存在: $DOWNLOADS_DIRECTORY"
+  
+  local processed_count=0
+  
+  # Downloads 目录直接包含视频目录，没有演员目录层级
+  for dir in "$DOWNLOADS_DIRECTORY"/*/; do
+    [[ -d "$dir" ]] || continue
+
+    while IFS= read -r -d '' nfo_file; do
+      process_nfo "$nfo_file"
+      ((processed_count++))
+    done < <(find "$dir" -type f -name "*.nfo" -print0)
+  done
+  
+  echo "处理完成，共处理 $processed_count 个 NFO 文件"
+}
+
 # 主程序
 main() {
   init_actor_dict
-
-  # 遍历目录处理 NFO 文件
-  for dir in "$DST_DIRECTORY"/*/; do
-    [[ -d "$dir" ]] || continue
-    
-    # 跳过缓存目录
-    [[ "$dir" == "$CACHE_DIRECTORY/" ]] && continue
-
-    local dir_name
-    dir_name=$(basename "$dir" | sed 's/^[^-]*-//')
-
-    while IFS= read -r -d '' nfo_file; do
-      process_nfo "$nfo_file" "$dir_name"
-    done < <(find "$dir" -type f -name "*.nfo" -print0)
-  done
+  process_downloads_directory
 }
 
 # 执行主程序
