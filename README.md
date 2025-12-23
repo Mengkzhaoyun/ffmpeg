@@ -20,7 +20,7 @@ bash download-mv.sh
 ### run
 
 ```bash
-cp .tmp/actors.yaml /share/CACHEDEV1_DATA/Public/Plex/Mosaics/.cache/actors.yaml 
+cp .tmp/actors.yaml /share/CACHEDEV1_DATA/Public/Plex/Mosaics/.cache/actors.yaml
 
 bash nfo.sh
 
